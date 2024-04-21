@@ -3,14 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-dnd/shallowequal": "^4.0.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.3.3",
     "csv-parser": "^3.0.0",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
     "react-dom": "^18.2.0",
+    "react-flow": "^1.0.3",
+    "react-flow-renderer": "^10.3.17",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
+    "react-table": "^7.8.0",
+    "reactflow": "^11.11.0",
+    "stream-browserify": "^3.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -36,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-dnd-html5-backend": "^16.0.1"
   }
 }

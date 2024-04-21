@@ -35,4 +35,97 @@ body {
 .nav-link:hover {
   background-color: #444;
 }
+.updatenode__controls {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 4;
+  font-size: 12px;
+}
 
+.updatenode__controls label {
+  display: block;
+}
+
+.updatenode__bglabel {
+  margin-top: 10px;
+}
+
+.updatenode__checkboxwrapper {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+/* Dodaj style dla węzła w React Flow */
+.react-flow__node {
+  background-color: #f0f0f0; /* Kolor tła */
+  padding: 10px; /* Wewnętrzny margines */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  border: 1px solid #ccc; /* Grubość i kolor obramowania */
+}
+
+/* Dodaj style dla tytułu w węźle */
+.react-flow__node .react-flow__node-title {
+  font-weight: bold; /* Pogrubienie */
+}
+
+/* Dodaj style dla wierszy w węźle */
+.react-flow__node .react-flow__node-row {
+  margin-top: 5px; /* Górny margines dla wierszy */
+}
+/* Dodaj style dla węzła w React Flow */
+.react-flow__node {
+  background-color: #f0f0f0; /* Kolor tła */
+  padding: 10px; /* Wewnętrzny margines */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  border: 1px solid #ccc; /* Grubość i kolor obramowania */
+}
+
+/* Dodaj style dla tytułu w węźle */
+.react-flow__node .react-flow__node-title {
+  font-weight: bold; /* Pogrubienie */
+}
+
+/* Dodaj style dla wierszy w węźle */
+.react-flow__node .react-flow__node-row {
+  margin-top: 5px; /* Górny margines dla wierszy */
+}
+.custom-table {
+  width: 50%; /* Możesz dostosować szerokość tabel według potrzeb */
+  border-collapse: collapse;
+  cursor: grab; /* Dodajemy kursor grab do oznaczenia możliwości przeciągania */
+}
+
+.custom-table th, .custom-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20px; /* Dodajemy marginesy dla estetyki */
+}
+/* App.css */
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20px; /* Dodajemy marginesy dla estetyki */
+}
+
+.table-container {
+  flex: 1;
+  cursor: grab;
+  margin: 0 10px; /* Dodajemy marginesy między tabelkami */
+}
+
+.table-container.highlight {
+  outline: 2px dashed #000;
+}
