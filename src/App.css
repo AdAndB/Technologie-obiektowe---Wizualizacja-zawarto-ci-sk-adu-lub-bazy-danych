@@ -56,76 +56,52 @@ body {
   display: flex;
   align-items: center;
 }
-/* Dodaj style dla węzła w React Flow */
-.react-flow__node {
-  background-color: #f0f0f0; /* Kolor tła */
-  padding: 10px; /* Wewnętrzny margines */
-  border-radius: 5px; /* Zaokrąglenie rogów */
-  border: 1px solid #ccc; /* Grubość i kolor obramowania */
-}
 
-/* Dodaj style dla tytułu w węźle */
-.react-flow__node .react-flow__node-title {
-  font-weight: bold; /* Pogrubienie */
-}
-
-/* Dodaj style dla wierszy w węźle */
-.react-flow__node .react-flow__node-row {
-  margin-top: 5px; /* Górny margines dla wierszy */
-}
-/* Dodaj style dla węzła w React Flow */
-.react-flow__node {
-  background-color: #f0f0f0; /* Kolor tła */
-  padding: 10px; /* Wewnętrzny margines */
-  border-radius: 5px; /* Zaokrąglenie rogów */
-  border: 1px solid #ccc; /* Grubość i kolor obramowania */
-}
-
-/* Dodaj style dla tytułu w węźle */
-.react-flow__node .react-flow__node-title {
-  font-weight: bold; /* Pogrubienie */
-}
-
-/* Dodaj style dla wierszy w węźle */
-.react-flow__node .react-flow__node-row {
-  margin-top: 5px; /* Górny margines dla wierszy */
-}
-.custom-table {
-  width: 50%; /* Możesz dostosować szerokość tabel według potrzeb */
-  border-collapse: collapse;
-  cursor: grab; /* Dodajemy kursor grab do oznaczenia możliwości przeciągania */
-}
 
 .custom-table th, .custom-table td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-.custom-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+
+
+
+
+
+
+
+
+
+
+
+.resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #dccfcf;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 1.5); /* Dodajemy cień dla lepszego efektu wizualnego */
 }
 
-.container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin: 20px; /* Dodajemy marginesy dla estetyki */
-}
-/* App.css */
-.container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin: 20px; /* Dodajemy marginesy dla estetyki */
+
+
+
+
+.resize-handle.bottom-left {
+  bottom: -5px;
+  left: -5px;
+  cursor: nesw-resize;
 }
 
-.table-container {
-  flex: 1;
-  cursor: grab;
-  margin: 0 10px; /* Dodajemy marginesy między tabelkami */
+
+
+.resize-handle.bottom-right {
+  bottom: -5px;
+  right: 100%;
+  cursor: nwse-resize;
 }
 
-.table-container.highlight {
-  outline: 2px dashed #000;
-}
+
+
+
+
+
