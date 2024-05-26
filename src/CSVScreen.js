@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from './Table';
 
@@ -123,7 +122,7 @@ const CSVScreen = () => {
                     <ul>
                         {duplicateTables.map((tableName, index) => (
                             <li key={index}>{tableName}</li> /* Wyświetlanie tabel zawierających duplikaty */
-                            ))}
+                        ))}
                     </ul>
                 </div>
             )}
