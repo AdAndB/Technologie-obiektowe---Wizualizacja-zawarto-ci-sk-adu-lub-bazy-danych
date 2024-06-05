@@ -1,39 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import domtoimage from 'dom-to-image';
 import Table from './Table';
 
 const CSVScreen = () => {
-    const [selectedFiles, setSelectedFiles] = useState([]); // Stan przechowujący wybrane pliki
-    const [error, setError] = useState(''); // Stan przechowujący komunikat o błędzie
-    const [csvData, setCSVData] = useState([]); // Stan przechowujący dane z plików CSV
-    const [showTables, setShowTables] = useState(false); // Stan informujący, czy pokazać tabele
-    const [duplicateTables, setDuplicateTables] = useState([]); // Stan przechowujący tabele z duplikatami
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [error, setError] = useState('');
+    const [csvData, setCSVData] = useState([]);
+    const [showTables, setShowTables] = useState(false);
+    const [duplicateTables, setDuplicateTables] = useState([]);
 
     useEffect(() => {
-        // Efekt uruchamiany po zmianie danych CSV
         if (csvData.length > 0) {
-            checkDuplicateColumns(); // Sprawdzanie duplikatów po zmianie danych CSV
+            checkDuplicateColumns();
         }
-    }, [csvData]); // Efekt zależny od zmian w danych CSV
+    }, [csvData]);
 
     const handleFileChange = (event) => {
-        // Obsługa zmiany plików
         const files = event.target.files;
         const newFiles = Array.from(files);
 
         const allowedFiles = newFiles.filter(file => file.name.toLowerCase().endsWith('.csv'));
 
         if (allowedFiles.length > 0) {
-            setError(''); // Czyszczenie komunikatu o błędzie
-            setSelectedFiles([...selectedFiles, ...allowedFiles]); // Dodawanie wybranych plików do stanu
-            parseCSV(allowedFiles); // Parsowanie plików CSV
+            setError('');
+            setSelectedFiles([...selectedFiles, ...allowedFiles]);
+            parseCSV(allowedFiles);
         } else {
-            setError('Wybierz co najmniej jeden plik o rozszerzeniu .csv'); // Ustawianie komunikatu o błędzie
+            setError('Wybierz co najmniej jeden plik o rozszerzeniu .csv');
         }
     };
 
     const parseCSV = (files) => {
-        // Funkcja parsująca pliki CSV
         const promises = files.map(file => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -41,8 +39,8 @@ const CSVScreen = () => {
                     const text = event.target.result;
                     const rows = text.split('\n');
                     const columns = rows[0].split(',');
-                    const tableName = file.name.replace('.csv', ''); // Ustalanie nazwy tabeli na podstawie nazwy pliku
-                    const tableData = { tableName, columns, data: rows.slice(1).map(row => row.split(',')) }; // Tworzenie danych tabeli
+                    const tableName = file.name.replace('.csv', '');
+                    const tableData = { tableName, columns, data: rows.slice(1).map(row => row.split(',')) };
                     resolve(tableData);
                 };
                 reader.onerror = (error) => reject(error);
@@ -52,16 +50,14 @@ const CSVScreen = () => {
 
         Promise.all(promises)
             .then(parsedData => {
-                setCSVData(prevData => [...prevData, ...parsedData]); // Aktualizacja danych CSV
+                setCSVData(prevData => [...prevData, ...parsedData]);
             })
             .catch(error => console.error('Error parsing CSV:', error));
     };
 
     const checkDuplicateColumns = () => {
-        // Funkcja sprawdzająca duplikaty kolumn
-        const columnNamesMap = new Map(); // Mapa przechowująca nazwy kolumn w każdej tabeli
+        const columnNamesMap = new Map();
 
-        // Przechodzimy przez każdą tabelę i zbieramy nazwy kolumn
         csvData.forEach(data => {
             const tableName = data.tableName.toLowerCase();
             const tableColumns = data.columns.map(column => column.toLowerCase());
@@ -74,7 +70,6 @@ const CSVScreen = () => {
             tableColumns.forEach(column => columnSet.add(column));
         });
 
-        // Sprawdzamy, czy pomiędzy tabelami istnieją duplikaty nazw kolumn zawierających "ID"
         const duplicateTablesSet = new Set();
         columnNamesMap.forEach((columnSet, tableName) => {
             columnSet.forEach(columnName => {
@@ -89,11 +84,27 @@ const CSVScreen = () => {
             });
         });
 
-        setDuplicateTables(Array.from(duplicateTablesSet)); // Aktualizacja stanu z tabelami zawierającymi duplikaty
+        setDuplicateTables(Array.from(duplicateTablesSet));
     };
 
     const handleGenerateSchema = () => {
-        setShowTables(true); // Ustawienie stanu, aby pokazać tabele
+        setShowTables(true);
+    };
+
+    const handleSaveAsPNG = () => {
+        window.scrollTo(0, 0);
+        const container = document.getElementById('tables-container');
+
+        domtoimage.toPng(container, { quality: 1 })
+            .then((dataUrl) => {
+                const link = document.createElement('a');
+                link.download = 'screenshot.png';
+                link.href = dataUrl;
+                link.click();
+            })
+            .catch((error) => {
+                console.error('Error saving as PNG:', error);
+            });
     };
 
     return (
@@ -105,12 +116,11 @@ const CSVScreen = () => {
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <div style={{ color: 'white' }}>
+            <div id="tables-container" style={{ color: 'white', overflow: 'auto' }}>
                 {showTables &&
                     csvData.map((data, index) => (
                         <div key={index}>
-                            <h3> </h3>
-                            <Table tableName={data.tableName} headers={data.columns} data={data.data} /> {/* Renderowanie tabeli */}
+                            <Table tableName={data.tableName} headers={data.columns} data={data.data} />
                         </div>
                     ))
                 }
@@ -121,13 +131,14 @@ const CSVScreen = () => {
                     <h4>Znalezione duplikaty nazw kolumn w tabelach:</h4>
                     <ul>
                         {duplicateTables.map((tableName, index) => (
-                            <li key={index}>{tableName}</li> /* Wyświetlanie tabel zawierających duplikaty */
+                            <li key={index}>{tableName}</li>
                         ))}
                     </ul>
                 </div>
             )}
 
             <button onClick={handleGenerateSchema} className="btn btn-outline-primary" style={{ position: 'absolute', top: 50, right: 50 }}>Generuj schemat bazy danych</button>
+            <button onClick={handleSaveAsPNG} className="btn btn-outline-secondary" style={{ position: 'absolute', top: 100, right: 50 }}>Zapisz jako PNG</button>
         </div>
     );
 };
