@@ -4,6 +4,11 @@ body {
 }
 
 .app-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: #333333;
   padding: 20px;
   text-align: center;
@@ -59,9 +64,10 @@ body {
 }
 
 .table-container {
-  position: relative;
   border: 1px solid #ccc;
+  background-color: #595858; /* Dodane tło */
   overflow: hidden;
+  border-radius: 5px; /* Zaokrąglone rogi */
 }
 
 .resize-handle {
@@ -72,11 +78,6 @@ body {
   box-shadow: 0 0 5px rgba(0, 0, 0, 1.5); /* Dodajemy cień dla lepszego efektu wizualnego */
 }
 
-.resize-handle.bottom-left {
-  bottom: -5px;
-  left: -5px;
-  cursor: nesw-resize;
-}
 
 .resize-handle.bottom-right {
   bottom: -5px;
@@ -96,4 +97,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.expanded {
+  background-color: #676666; /* Kolor tła dla rozwiniętej tabeli */
 }

@@ -1,19 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
-import './App.css'; // Zaimportuj styl CSS dla tabeli
+import './App.css';
 
-const Table = ({ tableName, headers, data, initialPosition }) => {
-    const [position, setPosition] = useState(initialPosition ?? { x: 0, y: 0 });
+const Table = ({ tableName, headers, data, onPositionChange, zIndex }) => {
+    const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isExpanded, setIsExpanded] = useState(false);
-    const [size, setSize] = useState({ width: 100, height: 60 }); // Początkowy rozmiar tabeli
+    const [size, setSize] = useState({ width: 100, height: 60 });
     const [resizeDirection, setResizeDirection] = useState(null);
     const [columnTypes, setColumnTypes] = useState([]);
-    const [primaryKeyIndex, setPrimaryKeyIndex] = useState(-1); // Indeks pierwszego wystąpienia kolumny "ID"
-    const [foreignKeysIndexes, setForeignKeysIndexes] = useState([]); // Indeksy kolejnych wystąpień kolumny "ID"
+    const [primaryKeyIndex, setPrimaryKeyIndex] = useState(-1);
+    const [foreignKeysIndexes, setForeignKeysIndexes] = useState([]);
     const ref = useRef(null);
-    // Stałe szerokości kolumn i wysokość wierszy
-    const columnWidth = 80;
     const rowHeight = 20;
+
+    const calculateCenterPoint = () => {
+        const centerX = position.x + size.width / 2;
+        const centerY = position.y + size.height / 2;
+        return { x: centerX, y: centerY };
+    };
 
     useEffect(() => {
         const determineColumnTypes = () => {
@@ -41,7 +45,6 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
     }, [headers, data]);
 
     useEffect(() => {
-        // Znajdowanie pierwszego wystąpienia kolumny "ID" i indeksów kolejnych wystąpień
         let primaryFound = false;
         const fkIndexes = [];
         headers.forEach((header, index) => {
@@ -71,9 +74,8 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
                     newHeight = e.clientY - rect.top;
                 }
 
-                // Ustawianie minimalnego rozmiaru tabeli
-                newWidth = Math.max(newWidth, 5); // Minimalna szerokość
-                newHeight = Math.max(newHeight, 5); // Minimalna wysokość
+                newWidth = Math.max(newWidth, 50);
+                newHeight = Math.max(newHeight, 50);
 
                 setSize({ width: newWidth, height: newHeight });
             }
@@ -98,7 +100,10 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
 
     const handleDrag = (e, ui) => {
         const { x, y } = position;
-        setPosition({ x: x + ui.deltaX, y: y + ui.deltaY });
+        const newPosition = { x: x + ui.deltaX, y: y + ui.deltaY };
+        const centerPoint = calculateCenterPoint(newPosition, size);
+        setPosition(newPosition);
+        onPositionChange(tableName, newPosition, centerPoint, size, zIndex);
     };
 
     return (
@@ -116,9 +121,7 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
                     top: position?.y,
                     width: size.width,
                     height: size.height,
-                    overflow: 'hidden',
-                    minWidth: '50px', // Minimalna szerokość
-                    minHeight: '50px' // Minimalna wysokość
+                    zIndex: zIndex
                 }}
             >
                 <div
@@ -126,10 +129,10 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
                     onMouseDown={() => setResizeDirection('bottom-right')}
                 />
                 {isExpanded ? (
-                    <table className="custom-table">
+                    <table className="custom-table expanded">
                         <thead>
                         <tr>
-                            <th colSpan={headers.length} style={{ backgroundColor: 'blue', color: 'white', height: rowHeight }}>
+                            <th colSpan={headers.length} className="table-header">
                                 {tableName}
                                 <button
                                     type="button"
@@ -168,10 +171,10 @@ const Table = ({ tableName, headers, data, initialPosition }) => {
                         </tbody>
                     </table>
                 ) : (
-                    <table className="custom-table">
+                    <table className="custom-table collapsed">
                         <tbody>
                         <tr>
-                            <th colSpan={1} style={{ backgroundColor: 'blue', color: 'white', height: rowHeight }}>
+                            <th colSpan={1} className="table-header">
                                 {tableName}
                                 <button
                                     type="button"

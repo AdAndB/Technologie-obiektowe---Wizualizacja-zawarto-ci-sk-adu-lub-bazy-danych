@@ -11,7 +11,7 @@ const App = () => {
     return (
         <Router>
             <div className="app-container">
-                {/* Dodaj Link do nawigacji */}
+
 
 
                 <Routes>
